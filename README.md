@@ -9,11 +9,14 @@ Angie’s Berry corner is a fruit store located in Dallas that has decided they 
 • Loyalty customers table which has the name of all their customers and id.
 • Products table which contains a list of all twelve products that Angie’s Berry Corner currently sells their id, unit, and price.
 • Employee table contains a list of all ten employees that worked during the timeframe captured in the transaction report. If the employee quit or was fired, they will have an end date in addition to the start date that all employees have.
+
 Methodology;
 
 A database was created for Angie berry and 4 tables were also created within the database and the data was stored using the import command on the Navicat for MySQL application to answer business questions.
 
+
 What is Angie’s Berry Corner’s average daily sales volume?
+
 
 On average, Angie’s berry corner sells 1 product daily and makes approximately $43,429.
 Which products sell best?
