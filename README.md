@@ -95,3 +95,4 @@ The day of the week with the most sales is saturday where 41,755 products were s
 Which month of the year does the organization make the most sales?
 
 The organization makes the most sales in July with $4,080,801,411 as the total sales
+
