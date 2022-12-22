@@ -1,4 +1,4 @@
-															Angie Berry’s Corner
+		Angie Berry’s Corner
 Brief Summary
 
 Angie’s Berry corner is a fruit store located in Dallas that has decided they need the help of a data analyst so  I asked Angie to give us as much data as possible so we could familiarize ourselves with their current operations and come up with a strategic plan.  She has provided me with 4 tables to work with;
