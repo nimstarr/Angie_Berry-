@@ -1,0 +1,223 @@
+﻿-- Exported from QuickDBD: https://www.quickdatabasediagrams.com/
+-- Link to schema: https://app.quickdatabasediagrams.com/#/d/ObnSlc
+-- NOTE! If you have used non-SQL datatypes in your design, you will have to change these here.
+
+
+CREATE TABLE `employees` (
+    `employeeID` int  NOT NULL ,
+    `firstname` varchar(50)  NOT NULL ,
+    `lastname` varchar(50)  NOT NULL ,
+    `start_date` date  NOT NULL ,
+    `end_date` date  NOT NULL ,
+    PRIMARY KEY (
+        `employeeID`
+    )
+);
+
+CREATE TABLE `loyalty_customers` (
+    `customer_id` int  NOT NULL ,
+    `first_name` varchar(50)  NOT NULL ,
+    `last_name` varchar(50)  NOT NULL ,
+    PRIMARY KEY (
+        `customer_id`
+    )
+);
+
+CREATE TABLE `products` (
+    `product_id` int  NOT NULL ,
+    `ProductName` varchar(250)  NOT NULL ,
+    `Price` decimal(5,2)  NOT NULL ,
+    `Unit` varchar(50)  NOT NULL ,
+    PRIMARY KEY (
+        `product_id`
+    )
+);
+
+CREATE TABLE `transaction_report` (
+    `transaction_id` varchar(150)  NOT NULL ,
+    `customer_id` int  NOT NULL ,
+    `product_id` int  NOT NULL ,
+    `quantity` int  NOT NULL ,
+    `paid_at` timestamp  NOT NULL ,
+    `amount` int  NOT NULL 
+);
+
+ALTER TABLE `products` ADD CONSTRAINT `fk_products_product_id` FOREIGN KEY(`product_id`)
+REFERENCES `transaction_report` (`product_id`);
+
+ALTER TABLE `transaction_report` ADD CONSTRAINT `fk_transaction_report_customer_id` FOREIGN KEY(`customer_id`)
+REFERENCES `loyalty_customers` (`customer_id`);
+
+#Angie berry average daily sales--
+
+SELECT DISTINCT
+	avg( quantity ) AS Average_Dailysales,
+	avg(Amount) as avg_dailyamount
+FROM
+	transaction_report 
+
+
+#which products sells best
+SELECT
+	p.id,
+	p.NAME as Bestseller,
+	sum( t.quantity ) as quantity_sold
+FROM
+	products AS p
+JOIN transaction_report AS t ON p.id = t.product_id 
+GROUP BY
+	p.id,
+	p.NAME
+	ORDER BY
+	quantity_sold DESC limit 5
+  
+  #top 5 Angie loyalty customers
+SELECT
+	t.customer_id,
+	CONCAT( l.first_name, ' ', l.last_name ) AS fullname,
+	t.Amount,
+	(2 * Amount) as loyalty_points 
+FROM
+	loyalty_customers AS l
+	JOIN transaction_report AS t ON l.id = t.customer_id 
+GROUP BY
+	t.customer_id,
+	fullname,
+	Amount 
+ORDER BY
+	loyalty_points DESC LIMIT 5
+  
+ #product that generates the least income 
+  SELECT
+	t.product_id,
+	p.NAME,
+	sum( Amount ) AS product_income 
+FROM
+	products AS p
+	INNER JOIN transaction_report AS t ON p.id = t.product_id 
+GROUP BY
+	p.NAME,
+	product_id 
+ORDER BY
+	product_income limit 1
+  
+  #the full names of current staff
+SELECT
+	id,
+	concat( first_name, ' ', last_name ) AS Staff_fullname 
+FROM
+	employees
+	where end_date is null
+  
+  
+  #Total income from sales
+SELECT
+	sum( Amount) AS income_from_sales 
+FROM
+	transaction_report
+  
+  
+  #income generated from each product
+SELECT
+	t.product_id,
+	p.NAME AS Product_Name,
+	SUM( t.Amount ) AS Product_income 
+FROM
+	products AS p
+	INNER JOIN transaction_report AS t ON p.id = t.product_id 
+GROUP BY
+	p.NAME,
+	t.product_id 
+ORDER BY
+	Product_income DESC
+  
+  #the customer that patronizes the most
+SELECT
+	CONCAT( l.first_name, ' ', l.last_name ) AS fullname,
+	sum( Amount ) AS total_amount 
+FROM
+	loyalty_customers AS l
+	JOIN transaction_report AS t ON l.id = t.customer_id 
+GROUP BY
+	fullname 
+ORDER BY
+	total_amount DESC
+	LIMIT 5
+  
+  #product with highest income
+SELECT
+	t.product_id,
+	p.NAME AS Product_Name,
+	SUM( t.Amount ) AS Product_income 
+FROM
+	products AS p
+	INNER JOIN transaction_report AS t ON p.id = t.product_id 
+GROUP BY
+	p.NAME,
+	t.product_id 
+ORDER BY
+	Product_income DESC limit 1
+  
+  #the customer that generates the least income
+SELECT
+	CONCAT( l.first_name, ' ', l.last_name ) AS fullname,
+	sum( Amount ) AS total_amount 
+FROM
+	loyalty_customers AS l
+	JOIN transaction_report AS t ON l.id = t.customer_id 
+GROUP BY
+	fullname 
+ORDER BY
+	total_amount ASC
+	LIMIT 5
+  
+ #employee with least day at Angie
+SELECT
+	CONCAT( first_name, ' ', last_name ) AS Employee_name,
+	start_date,
+	end_date,
+	DATEDIFF(end_date, start_date) AS No_of_days_worked 
+FROM
+	employees 
+WHERE
+	end_date IS NOT NULL 
+ORDER BY
+	No_of_days_worked
+  
+  #Organization's busiest hour
+SELECT
+	EXTRACT( HOUR FROM paid_at ) AS Busiest_hour,
+	sum( quantity ) AS Quantitysold_per_hour
+FROM
+	transaction_report 
+GROUP BY
+	EXTRACT( HOUR FROM paid_at ) 
+ORDER BY
+	Quantitysold_per_hour DESC LIMIT 1
+  
+  #Day of the week with most sales
+SELECT
+	DAYNAME( paid_at ) AS Day_of_week,
+	sum( quantity) AS Quantity_per_day
+FROM
+	transaction_report 
+GROUP BY
+DAYNAME( paid_at )
+order by 
+Quantity_per_day desc limit 1
+
+
+#month with thw highest sale
+SELECT
+	MONTHNAME( paid_at ) AS Busiest_Month,
+	SUM( Amount) AS sales_per_month
+FROM
+	transaction_report 
+GROUP BY
+	MONTHNAME( paid_at ) 
+ORDER BY
+	sales_per_month DESC limit 1
+  
+  
+ 
+	
