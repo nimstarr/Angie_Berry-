@@ -2,12 +2,15 @@
 Angie Berry
 
 Brief Summary
+
 Angie’s Berry corner is a fruit store located in Dallas that has decided they need the help of a data analyst so I asked Angie to give us as much data as possible so we could familiarize ourselves with their current operations and come up with a strategic plan. She has provided me with 4 tables to work with;
+
 • Transaction report; this file contains a list of the last 100,000 transactions as of 19th August 2019, with columns (id, customer id, product id, quantity, paid at, and Amount)
 • Loyalty customers table which has the name of all their customers and id.
 • Products table which contains a list of all twelve products that Angie’s Berry Corner currently sells their id, unit, and price.
 • Employee table contains a list of all ten employees that worked during the timeframe captured in the transaction report. If the employee quit or was fired, they will have an end date in addition to the start date that all employees have.
 Methodology;
+
 A database was created for Angie berry and 4 tables were also created within the database and the data was stored using the import command on the Navicat for MySQL application to answer business questions.
 
 What is Angie’s Berry Corner’s average daily sales volume?
